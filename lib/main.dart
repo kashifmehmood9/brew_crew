@@ -10,6 +10,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  // runApp(
+  //   MyApp(),
+  // );
+
   runApp(
     MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => AuthService())],
@@ -24,8 +28,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Wrapper(),
+    return StreamProvider(
+      create: (context) => AuthService().user,
+      initialData: null,
+      child: MaterialApp(
+        home: Wrapper(),
+      ),
     );
   }
 }

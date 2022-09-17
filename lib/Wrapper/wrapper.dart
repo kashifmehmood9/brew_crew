@@ -1,3 +1,4 @@
+import 'package:brew_crew/Models/User.dart';
 import 'package:brew_crew/Screens/Authenticate/authenticate.dart';
 import 'package:brew_crew/Screens/Home/home.dart';
 import 'package:brew_crew/Services/AuthService.dart';
@@ -9,8 +10,8 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<AuthService>().user;
-    print("Wrapper $user");
+    final user = Provider.of<AppUser?>(context);
+    print("Wrapper---- $user");
 
     if (user == null) {
       return Authenticate();

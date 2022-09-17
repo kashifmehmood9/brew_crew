@@ -2,6 +2,7 @@ import 'package:brew_crew/Models/User.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/scheduler.dart';
 
 class AuthService with ChangeNotifier, DiagnosticableTreeMixin {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -11,7 +12,10 @@ class AuthService with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   Stream<AppUser> get user {
-    return _auth.authStateChanges().map(_userFromFirebase);
+    notifyListeners();
+    Stream<AppUser> user = _auth.authStateChanges().map(_userFromFirebase);
+    print("User state changed --- $user");
+    return user;
   }
   //anonymous sign in
 
@@ -19,7 +23,6 @@ class AuthService with ChangeNotifier, DiagnosticableTreeMixin {
     try {
       UserCredential result = await _auth.signInAnonymously();
       User? user = result.user;
-      // notifyListeners();
       return _userFromFirebase(user);
     } catch (exception) {
       print(exception.toString());
@@ -36,6 +39,8 @@ class AuthService with ChangeNotifier, DiagnosticableTreeMixin {
     try {
       print("Signing out...");
       await _auth.signOut();
+      print("Signing out complete");
+      print("User is -- $user");
     } catch (e) {
       print(e);
       return null;
