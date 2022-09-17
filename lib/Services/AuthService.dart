@@ -7,13 +7,14 @@ import 'package:flutter/scheduler.dart';
 class AuthService with ChangeNotifier, DiagnosticableTreeMixin {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  AppUser _userFromFirebase(User? user) {
-    return user != null ? AppUser(uid: user.uid) : AppUser(uid: "-");
+  AppUser? _userFromFirebase(User? user) {
+    print("casting user ${user?.uid}");
+    return user != null ? AppUser(uid: user.uid) : null;
   }
 
-  Stream<AppUser> get user {
+  Stream<AppUser?> get user {
     notifyListeners();
-    Stream<AppUser> user = _auth.authStateChanges().map(_userFromFirebase);
+    Stream<AppUser?> user = _auth.authStateChanges().map(_userFromFirebase);
     print("User state changed --- $user");
     return user;
   }
