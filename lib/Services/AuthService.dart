@@ -8,7 +8,6 @@ class AuthService with ChangeNotifier, DiagnosticableTreeMixin {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   AppUser? _userFromFirebase(User? user) {
-    print("casting user ${user?.uid}");
     return user != null ? AppUser(uid: user.uid) : null;
   }
 
@@ -41,7 +40,6 @@ class AuthService with ChangeNotifier, DiagnosticableTreeMixin {
       print("Signing out...");
       await _auth.signOut();
       print("Signing out complete");
-      print("User is -- $user");
     } catch (e) {
       print(e);
       return null;

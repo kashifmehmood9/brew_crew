@@ -1,4 +1,6 @@
 import 'package:brew_crew/Models/User.dart';
+import 'package:brew_crew/Screens/Authenticate/register.dart';
+import 'package:brew_crew/Screens/Authenticate/sign_in.dart';
 import 'package:brew_crew/Screens/Home/home.dart';
 import 'package:brew_crew/Services/AuthService.dart';
 import 'package:brew_crew/Wrapper/wrapper.dart';
