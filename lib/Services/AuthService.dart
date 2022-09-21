@@ -29,10 +29,29 @@ class AuthService with ChangeNotifier, DiagnosticableTreeMixin {
       return null;
     }
   }
+
 // sign in with email and password
+  Future signInWithEmailPassword(String email, String password) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return _userFromFirebase(result.user);
+    } catch (e) {
+      return LoginError(localizedDescription: e.toString());
+    }
+  }
 
-  //register with email and passord
+  //register with email and password
 
+  Future registerWithEmailPassword(String email, String password) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return _userFromFirebase(result.user);
+    } catch (e) {
+      return RegistrationError(localizedDescription: e.toString());
+    }
+  }
   //signout
 
   Future signOut() async {

@@ -1,9 +1,10 @@
+import 'package:brew_crew/Models/User.dart';
 import 'package:brew_crew/Services/AuthService.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
   Function? toggleView;
-  final AuthService _authService = AuthService();
+
   SignIn({this.toggleView});
 
   @override
@@ -11,11 +12,15 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  String email = "";
-  String password = "";
-
   @override
   Widget build(BuildContext context) {
+    final AuthService _authService = AuthService();
+    final _formKey = GlobalKey<FormState>();
+
+    String _email = "";
+    String _password = "";
+    String _error = "";
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -35,37 +40,62 @@ class _SignInState extends State<SignIn> {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
             child: Form(
+              key: _formKey,
               child: Column(
                 children: [
                   const SizedBox(
                     height: 10,
                   ),
-                  TextField(
+                  TextFormField(
+                    validator: (value) {
+                      return (value?.isEmpty ?? false)
+                          ? "enter correct email"
+                          : null;
+                    },
                     onChanged: (val) {
-                      email = val;
+                      _email = val;
                     },
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  TextField(
+                  TextFormField(
                     obscureText: true,
+                    validator: (value) {
+                      return (value?.length ?? 0) < 6
+                          ? "enter 6+ chars long"
+                          : null;
+                    },
                     onChanged: (val) {
-                      password = val;
+                      _password = val;
                     },
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      print("Email: $email password $password");
+                    onPressed: () async {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        dynamic user = await _authService
+                            .signInWithEmailPassword(_email, _password);
+
+                        if (user is LoginError) {
+                          setState(() => _error = user.localizedDescription);
+                        }
+                      }
                     },
                     child: const Text(
                       'Sign in',
                       style: TextStyle(color: Colors.white),
                     ),
-                  )
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    _error,
+                    style: TextStyle(color: Colors.red),
+                  ),
                 ],
               ),
             ),
