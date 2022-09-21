@@ -1,6 +1,7 @@
 import 'package:brew_crew/Models/User.dart';
 import 'package:brew_crew/Services/AuthService.dart';
 import 'package:flutter/material.dart';
+import 'package:brew_crew/Shared/Constants.dart';
 
 class SignIn extends StatefulWidget {
   Function? toggleView;
@@ -22,7 +23,7 @@ class _SignInState extends State<SignIn> {
     String _error = "";
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey,
       appBar: AppBar(
         title: const Text("Sign in to brew crew"),
         elevation: 0.0,
@@ -47,6 +48,8 @@ class _SignInState extends State<SignIn> {
                     height: 10,
                   ),
                   TextFormField(
+                    decoration:
+                        textInputDecoration.copyWith(hintText: 'enter email'),
                     validator: (value) {
                       return (value?.isEmpty ?? false)
                           ? "enter correct email"
@@ -60,6 +63,8 @@ class _SignInState extends State<SignIn> {
                     height: 10,
                   ),
                   TextFormField(
+                    decoration: textInputDecoration.copyWith(
+                        hintText: 'Enter Password'),
                     obscureText: true,
                     validator: (value) {
                       return (value?.length ?? 0) < 6

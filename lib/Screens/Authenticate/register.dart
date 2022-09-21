@@ -1,6 +1,7 @@
 import 'package:brew_crew/Models/User.dart';
 import 'package:flutter/material.dart';
 import 'package:brew_crew/Services/AuthService.dart';
+import 'package:brew_crew/Shared/Constants.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;
@@ -22,7 +23,7 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey,
       appBar: AppBar(
         actions: [
           ElevatedButton.icon(
@@ -47,6 +48,8 @@ class _RegisterState extends State<Register> {
                     height: 10,
                   ),
                   TextFormField(
+                    decoration:
+                        textInputDecoration.copyWith(hintText: 'Enter email'),
                     validator: (value) {
                       return (value?.isEmpty ?? false)
                           ? "enter correct email"
@@ -60,6 +63,8 @@ class _RegisterState extends State<Register> {
                     height: 10,
                   ),
                   TextFormField(
+                    decoration: textInputDecoration.copyWith(
+                        hintText: 'Enter Password'),
                     obscureText: true,
                     validator: (value) {
                       return (value?.length ?? 0) < 6
