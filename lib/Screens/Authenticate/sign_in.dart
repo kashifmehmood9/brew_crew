@@ -1,5 +1,6 @@
 import 'package:brew_crew/Models/User.dart';
 import 'package:brew_crew/Services/AuthService.dart';
+import 'package:brew_crew/Shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:brew_crew/Shared/Constants.dart';
 
@@ -13,15 +14,18 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  final AuthService _authService = AuthService();
+  final _formKey = GlobalKey<FormState>();
+  bool loading = false;
+  String _email = "";
+  String _password = "";
+  String _error = "";
+
   @override
   Widget build(BuildContext context) {
-    final AuthService _authService = AuthService();
-    final _formKey = GlobalKey<FormState>();
-
-    String _email = "";
-    String _password = "";
-    String _error = "";
-
+    // if (loading) {
+    //   return Loading();
+    // }
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
@@ -78,22 +82,32 @@ class _SignInState extends State<SignIn> {
                   const SizedBox(
                     height: 20,
                   ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        dynamic user = await _authService
-                            .signInWithEmailPassword(_email, _password);
+                  ElevatedButton.icon(
+                      onPressed: () async {
+                        if (_formKey.currentState?.validate() ?? false) {
+                          setState(() {
+                            loading = true;
+                          });
+                          dynamic user = await _authService
+                              .signInWithEmailPassword(_email, _password);
 
-                        if (user is LoginError) {
-                          setState(() => _error = user.localizedDescription);
+                          if (user is LoginError) {
+                            setState(() {
+                              _error = user.localizedDescription;
+                              loading = false;
+                            });
+                          }
                         }
-                      }
-                    },
-                    child: const Text(
-                      'Sign in',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                      },
+                      icon: loading
+                          ? Center(child: Loading())
+                          : Icon(Icons.login),
+                      label: loading
+                          ? Text('Loading...')
+                          : Text(
+                              'Sign in',
+                              style: TextStyle(color: Colors.white),
+                            )),
                   const SizedBox(
                     height: 10,
                   ),

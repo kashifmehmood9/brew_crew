@@ -2,6 +2,7 @@ import 'package:brew_crew/Models/User.dart';
 import 'package:flutter/material.dart';
 import 'package:brew_crew/Services/AuthService.dart';
 import 'package:brew_crew/Shared/Constants.dart';
+import 'package:brew_crew/Shared/loading.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;
@@ -19,6 +20,7 @@ class _RegisterState extends State<Register> {
   String _email = "";
   String _password = "";
   String _error = "";
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -78,22 +80,32 @@ class _RegisterState extends State<Register> {
                   const SizedBox(
                     height: 20,
                   ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        dynamic user = await _authService
-                            .registerWithEmailPassword(_email, _password);
+                  ElevatedButton.icon(
+                      onPressed: () async {
+                        if (_formKey.currentState?.validate() ?? false) {
+                          setState(() {
+                            loading = true;
+                          });
+                          dynamic user = await _authService
+                              .registerWithEmailPassword(_email, _password);
 
-                        if (user is RegistrationError) {
-                          setState(() => _error = user.localizedDescription);
+                          if (user is RegistrationError) {
+                            setState(() {
+                              _error = user.localizedDescription;
+                              loading = false;
+                            });
+                          }
                         }
-                      }
-                    },
-                    child: const Text(
-                      'Sign up',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                      },
+                      icon: loading
+                          ? Center(child: Loading())
+                          : Icon(Icons.login),
+                      label: loading
+                          ? Text('Loading...')
+                          : Text(
+                              'Sign up',
+                              style: TextStyle(color: Colors.white),
+                            )),
                   SizedBox(
                     height: 10,
                   ),
