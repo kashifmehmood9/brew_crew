@@ -1,4 +1,5 @@
 import 'package:brew_crew/Models/User.dart';
+import 'package:brew_crew/Services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -47,6 +48,9 @@ class AuthService with ChangeNotifier, DiagnosticableTreeMixin {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+
+      await DatabaseService(userID: result.user?.uid)
+          .updateUserData('0', 'kashif', 1);
       return _userFromFirebase(result.user);
     } catch (e) {
       return RegistrationError(localizedDescription: e.toString());
