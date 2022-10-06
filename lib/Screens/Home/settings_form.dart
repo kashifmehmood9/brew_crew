@@ -1,3 +1,4 @@
+import 'package:brew_crew/Services/database.dart';
 import 'package:brew_crew/Shared/Constants.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class _SettingsFormState extends State<SettingsForm> {
 
   // form values
   String? _name, _currentSugars;
-  int _strength = 100;
+  String _strength = '100';
 
   @override
   Widget build(BuildContext context) {
@@ -57,17 +58,21 @@ class _SettingsFormState extends State<SettingsForm> {
                 min: 100,
                 max: 800,
                 divisions: 8,
-                activeColor: Colors.brown[_strength],
-                inactiveColor: Colors.brown[_strength],
-                value: _strength.toDouble(),
+                activeColor: Colors.brown,
+                inactiveColor: Colors.brown,
+                value: double.parse(_strength),
                 onChanged: (value) {
                   setState(() {
-                    _strength = value.round();
+                    _strength = value.toString();
                   });
                 }),
             ElevatedButton.icon(
                 onPressed: () {
-                  _formKey.currentState?.validate();
+                  if (_formKey.currentState?.validate() ?? false) {
+                    DatabaseService().updateUserData(
+                        _currentSugars ?? "0", _name ?? "", _strength);
+                  }
+
                   print("name: $_name");
                   print("sugars: $_currentSugars");
                   print("name: $_strength");

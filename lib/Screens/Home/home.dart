@@ -1,5 +1,5 @@
-import 'package:brew_crew/Screens/Home/brew.dart';
-import 'package:brew_crew/Screens/Home/settings_form.dart';
+import 'brew.dart';
+import 'settings_form.dart';
 import 'package:brew_crew/Services/AuthService.dart';
 import 'package:brew_crew/Services/database.dart';
 import 'package:flutter/material.dart';
@@ -18,13 +18,13 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<Brew>?>.value(
-      initialData: null,
+    return StreamProvider<List<Brew>>.value(
       value: DatabaseService().brews,
       catchError: (_, err) {
         print("Getting errors $err ");
-        return null;
+        return [];
       },
+      initialData: [],
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(

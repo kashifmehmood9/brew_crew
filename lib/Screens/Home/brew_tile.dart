@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class BrewTile extends StatefulWidget {
   final Brew brew;
-
   BrewTile({required this.brew});
 
   @override
@@ -20,10 +19,14 @@ class _BrewTileState extends State<BrewTile> {
         child: ListTile(
           leading: CircleAvatar(
             radius: 25,
-            backgroundColor: Colors.brown[widget.brew.strength],
+            backgroundColor:
+                Colors.brown[double.parse(widget.brew.strength).round()],
           ),
           title: Text(widget.brew.name),
           subtitle: Text('Takes ${widget.brew.sugars} sugars'),
+          onTap: () {
+            print("object");
+          },
         ),
       ),
     );

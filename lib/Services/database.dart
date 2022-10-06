@@ -9,7 +9,8 @@ class DatabaseService {
   final String? userID;
 
   DatabaseService({this.userID});
-  Future updateUserData(String sugars, String name, int strength) async {
+  Future updateUserData(String sugars, String name, String strength) async {
+    print("Updating...");
     return await brewsCollection
         .doc(userID)
         .set({'sugars': sugars, 'name': name, 'strength': strength});
@@ -18,15 +19,14 @@ class DatabaseService {
   List<Brew> _brewListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((document) {
       var docment = document.data;
-
       return Brew(
-          name: document["name"],
-          sugars: document["sugars"],
-          strength: document['strength']);
+          name: document["name"].toString(),
+          sugars: document["sugars"].toString(),
+          strength: document['strength'].toString());
     }).toList();
   }
 
-  Stream<List<Brew>?> get brews {
+  Stream<List<Brew>> get brews {
     return brewsCollection
         .snapshots()
         .map((snapshot) => _brewListFromSnapshot(snapshot));
