@@ -1,3 +1,5 @@
+import 'package:brew_crew/Models/User.dart';
+
 import 'brew.dart';
 import 'settings_form.dart';
 import 'package:brew_crew/Services/AuthService.dart';
@@ -18,8 +20,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<AppUser>(context);
     return StreamProvider<List<Brew>>.value(
-      value: DatabaseService().brews,
+      value: DatabaseService(userID: user.uid).brews,
       catchError: (_, err) {
         print("Getting errors $err ");
         return [];

@@ -49,7 +49,7 @@ class AuthService with ChangeNotifier, DiagnosticableTreeMixin {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      await DatabaseService(userID: result.user?.uid)
+      await DatabaseService(userID: result.user?.uid ?? "")
           .updateUserData('0', "kashif", "strength");
       return _userFromFirebase(result.user);
     } catch (e) {

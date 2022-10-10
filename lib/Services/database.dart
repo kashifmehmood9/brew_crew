@@ -1,15 +1,18 @@
+import 'dart:ffi';
+
 import 'package:brew_crew/Models/User.dart';
 import 'package:brew_crew/Screens/Home/brew.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 class DatabaseService {
   //reference to collection
   final CollectionReference brewsCollection =
       FirebaseFirestore.instance.collection('brews');
 
-  final String? userID;
+  late String userID;
 
-  DatabaseService({this.userID});
+  DatabaseService({required this.userID});
   Future updateUserData(String sugars, String name, String strength) async {
     print("Updating...");
     return await brewsCollection
@@ -27,12 +30,18 @@ class DatabaseService {
   }
 
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    var document = snapshot.data() as Map;
+    dynamic data = snapshot.data();
+    // print("name: ${data["name"]}");
+    // print("name: ${data["name"]}");
+    // print("sugars: ${data["sugars"]}");
+    // print("strength: ${data["strength"]}");
+    print("Getting data from snapshot for user $userID");
+
     return UserData(
-        uid: userID ?? "",
-        name: document["name"],
-        sugars: document["sugars"],
-        strength: document["strength"]);
+        uid: userID,
+        name: data["name"],
+        sugars: data["sugars"],
+        strength: data["strength"]);
   }
 
   Stream<List<Brew>> get brews {
@@ -42,6 +51,15 @@ class DatabaseService {
   }
 
   Stream<UserData> get userData {
-    return brewsCollection.doc(userID).snapshots().map((_userDataFromSnapshot));
+    // Stream<DocumentSnapshot<Object?>> data =
+    //     brewsCollection.doc(userID).snapshots();
+    // print("Data is ${data.toList().}");
+    // var coll = FirebaseFirestore.instance.collection(userID).doc();
+    // print("User", FirebaseFirestore.instance.)
+    // print(coll);
+    return brewsCollection
+        .doc("xsj3BmS2fQxXJDHTmawT")
+        .snapshots()
+        .map((_userDataFromSnapshot));
   }
 }
