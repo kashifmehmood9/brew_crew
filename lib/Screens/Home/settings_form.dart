@@ -37,11 +37,11 @@ class _SettingsFormState extends State<SettingsForm> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       "Update your settings",
                       style: TextStyle(fontSize: 18.0),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     TextFormField(
@@ -55,7 +55,7 @@ class _SettingsFormState extends State<SettingsForm> {
                         _name = val;
                       }),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     DropdownButtonFormField(
@@ -72,7 +72,7 @@ class _SettingsFormState extends State<SettingsForm> {
                         });
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Slider(
@@ -88,18 +88,21 @@ class _SettingsFormState extends State<SettingsForm> {
                           });
                         }),
                     ElevatedButton.icon(
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState?.validate() ?? false) {
-                            DatabaseService(userID: user.uid).updateUserData(
-                                _currentSugars ?? "0", _name ?? "", _strength);
+                            await DatabaseService(userID: user.uid)
+                                .updateUserData(
+                                    _currentSugars, _name, _strength);
                           }
                         },
-                        icon: Icon(Icons.update),
-                        label: Text("Update"))
+                        icon: const Icon(Icons.update),
+                        label: const Text("Update"))
                   ],
                 ));
           } else {
-            return Loading();
+            DatabaseService(userID: user.uid)
+                .updateUserData("0", "kashif", "100");
+            return const Loading();
           }
         });
   }

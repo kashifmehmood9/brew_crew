@@ -1,9 +1,6 @@
-import 'dart:ffi';
-
 import 'package:brew_crew/Models/User.dart';
 import 'package:brew_crew/Screens/Home/brew.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 
 class DatabaseService {
   //reference to collection
@@ -14,29 +11,25 @@ class DatabaseService {
 
   DatabaseService({required this.userID});
   Future updateUserData(String sugars, String name, String strength) async {
-    print("Updating...");
-    return await brewsCollection
+    print("Updating records for ... $userID");
+    await brewsCollection
         .doc(userID)
-        .set({'sugars': sugars, 'name': name, 'strength': strength});
+        .update({'sugars': sugars, 'name': name, 'strength': strength});
   }
 
   List<Brew> _brewListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((document) {
       return Brew(
-          name: document["name"].toString(),
-          sugars: document["sugars"].toString(),
-          strength: document['strength'].toString());
+          name: document["name"],
+          sugars: document["sugars"],
+          strength: document['strength']);
     }).toList();
   }
 
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
     dynamic data = snapshot.data();
-    // print("name: ${data["name"]}");
-    // print("name: ${data["name"]}");
-    // print("sugars: ${data["sugars"]}");
-    // print("strength: ${data["strength"]}");
     print("Getting data from snapshot for user $userID");
-
+    print(data);
     return UserData(
         uid: userID,
         name: data["name"],
@@ -51,15 +44,14 @@ class DatabaseService {
   }
 
   Stream<UserData> get userData {
-    // Stream<DocumentSnapshot<Object?>> data =
-    //     brewsCollection.doc(userID).snapshots();
-    // print("Data is ${data.toList().}");
-    // var coll = FirebaseFirestore.instance.collection(userID).doc();
-    // print("User", FirebaseFirestore.instance.)
-    // print(coll);
-    return brewsCollection
-        .doc("xsj3BmS2fQxXJDHTmawT")
-        .snapshots()
-        .map((_userDataFromSnapshot));
+    // print("Document ${brewsCollection.get()}");
+    // var querySnapshot = brewsCollection.get();
+    // querySnapshot.then((value) {
+    //   print("Document ${value.docs.first}");
+    // });
+
+    // print("Snapshots ${brewsCollection.doc().snapshots()}");
+
+    return brewsCollection.doc(userID).snapshots().map((_userDataFromSnapshot));
   }
 }
