@@ -19,8 +19,8 @@ class _BrewTileState extends State<BrewTile> {
         child: ListTile(
           leading: CircleAvatar(
             radius: 25,
-            backgroundColor:
-                Colors.brown[double.parse(widget.brew.strength).round()],
+            backgroundColor: Colors.brown[widget.brew.strength],
+            backgroundImage: AssetImage("assets/coffee_icon.png"),
           ),
           title: Text(widget.brew.name),
           subtitle: Text('Takes ${widget.brew.sugars} sugars'),

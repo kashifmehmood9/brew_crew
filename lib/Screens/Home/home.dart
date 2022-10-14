@@ -46,7 +46,12 @@ class _HomeState extends State<Home> {
                 label: Text("settings"))
           ],
         ),
-        body: BrewList(),
+        body: Container(
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/coffee_bg.png"),
+                    fit: BoxFit.cover)),
+            child: const BrewList()),
       ),
     );
   }
@@ -54,11 +59,13 @@ class _HomeState extends State<Home> {
   void _createBottomSheet(BuildContext context) {
     showModalBottomSheet(
         context: context,
-        builder: (context) {
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            child: SettingsForm(),
-          );
-        });
+        builder: (context) => StatefulBuilder(builder: (context, setState) {
+              return Container(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: SettingsForm(
+                  state: setState,
+                ),
+              );
+            }));
   }
 }

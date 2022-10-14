@@ -10,7 +10,7 @@ class DatabaseService {
   late String userID;
 
   DatabaseService({required this.userID});
-  Future updateUserData(String sugars, String name, String strength) async {
+  Future updateUserData(int sugars, String name, int strength) async {
     print("Updating records for ... $userID");
     // await FirebaseFirestore.instance
     //     .collection('brews')
@@ -46,8 +46,7 @@ class DatabaseService {
 
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
     dynamic data = snapshot.data();
-    print("Getting data from snapshot for user $userID");
-    print(data);
+    print("Getting data from snapshot $data");
     return UserData(
         uid: userID,
         name: data["name"],
@@ -62,14 +61,6 @@ class DatabaseService {
   }
 
   Stream<UserData> get userData {
-    // print("Document ${brewsCollection.get()}");
-    // var querySnapshot = brewsCollection.get();
-    // querySnapshot.then((value) {
-    //   print("Document ${value.docs.first}");
-    // });
-
-    // print("Snapshots ${brewsCollection.doc().snapshots()}");
-
     return brewsCollection.doc("one").snapshots().map((_userDataFromSnapshot));
   }
 }

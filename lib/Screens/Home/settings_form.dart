@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SettingsForm extends StatefulWidget {
-  const SettingsForm({Key? key}) : super(key: key);
+  Function state;
+  SettingsForm({required this.state});
 
   @override
   State<SettingsForm> createState() => _SettingsFormState();
@@ -19,7 +20,8 @@ class _SettingsFormState extends State<SettingsForm> {
 
   // form values
   String? _name, _currentSugars;
-  String? _strength;
+
+  int _strength = 100;
   late UserData userData;
   @override
   Widget build(BuildContext context) {
@@ -29,14 +31,15 @@ class _SettingsFormState extends State<SettingsForm> {
         stream: DatabaseService(userID: user.uid).userData,
         builder: (context, snapshot) {
           // snapshot.
-          if (snapshot.hasData &&
-              _name == null &&
-              _currentSugars == null &&
-              _strength == null) {
+          if (!snapshot.hasData) {
+            print("No data ${snapshot.data}");
+            return Loading();
+          }
+          if (snapshot.data != null && _name == null) {
             print("Snapshots has data");
             userData = snapshot.data as UserData;
             _name = userData.name;
-            _currentSugars = userData.sugars;
+            _currentSugars = userData.sugars.toString();
             _strength = userData.strength;
           }
           return Form(
@@ -69,12 +72,12 @@ class _SettingsFormState extends State<SettingsForm> {
                     value: _currentSugars,
                     items: sugars
                         .map((String item) =>
-                            DropdownMenuItem(child: Text(item), value: item))
+                            DropdownMenuItem(value: item, child: Text(item)))
                         .toList(),
                     onChanged: (value) {
-                      // setState(() {
-                      _currentSugars = value ?? "0";
-                      // });
+                      setState(() {
+                        _currentSugars = value;
+                      });
                     },
                   ),
                   const SizedBox(
@@ -86,10 +89,12 @@ class _SettingsFormState extends State<SettingsForm> {
                       divisions: 8,
                       activeColor: Colors.brown,
                       inactiveColor: Colors.brown,
-                      value: 100,
                       onChanged: (value) {
-                        _strength = value.toString();
-                      }),
+                        setState(() {
+                          _strength = value.round();
+                        });
+                      },
+                      value: _strength.toDouble()),
                   ElevatedButton.icon(
                       onPressed: () async {
                         if ((_formKey.currentState?.validate() ?? false) &&
@@ -97,8 +102,8 @@ class _SettingsFormState extends State<SettingsForm> {
                                 _name != null &&
                                 _strength != null)) {
                           await DatabaseService(userID: user.uid)
-                              .updateUserData(
-                                  _currentSugars!, _name!, _strength!);
+                              .updateUserData(int.parse(_currentSugars!),
+                                  _name!, _strength!);
                         } else {
                           _formKey.currentState?.validate();
                         }

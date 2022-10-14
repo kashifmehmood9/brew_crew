@@ -50,7 +50,7 @@ class AuthService with ChangeNotifier, DiagnosticableTreeMixin {
           email: email, password: password);
 
       await DatabaseService(userID: result.user?.uid ?? "")
-          .updateUserData('0', "kashif", "strength");
+          .updateUserData(0, "kashif", 100);
       return _userFromFirebase(result.user);
     } catch (e) {
       return RegistrationError(localizedDescription: e.toString());

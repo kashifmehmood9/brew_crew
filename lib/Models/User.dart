@@ -19,8 +19,8 @@ class LoginError extends Error {
 class UserData {
   final String uid;
   final String name;
-  final String sugars;
-  final String strength;
+  final int sugars;
+  final int strength;
 
   UserData(
       {required this.uid,
