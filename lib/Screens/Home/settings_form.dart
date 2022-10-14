@@ -86,9 +86,9 @@ class _SettingsFormState extends State<SettingsForm> {
                   Slider(
                       min: 100,
                       max: 800,
-                      divisions: 8,
-                      activeColor: Colors.brown,
-                      inactiveColor: Colors.brown,
+                      divisions: 7,
+                      activeColor: Colors.brown[_strength],
+                      inactiveColor: Colors.brown[_strength],
                       onChanged: (value) {
                         setState(() {
                           _strength = value.round();

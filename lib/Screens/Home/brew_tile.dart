@@ -12,6 +12,7 @@ class BrewTile extends StatefulWidget {
 class _BrewTileState extends State<BrewTile> {
   @override
   Widget build(BuildContext context) {
+    print("strength ${widget.brew.strength}");
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
