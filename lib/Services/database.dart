@@ -12,9 +12,27 @@ class DatabaseService {
   DatabaseService({required this.userID});
   Future updateUserData(String sugars, String name, String strength) async {
     print("Updating records for ... $userID");
-    await brewsCollection
-        .doc(userID)
-        .update({'sugars': sugars, 'name': name, 'strength': strength});
+    // await FirebaseFirestore.instance
+    //     .collection('brews')
+    //     .doc(userID)
+    print({"sugars": sugars, "name": name, "strength": strength});
+
+    final washingtonRef = FirebaseFirestore.instance
+        .collection("brews")
+        .doc("one")
+        .update({"name": name, "strength": strength, "sugars": sugars}).then(
+            (value) => print("DocumentSnapshot successfully updated!"),
+            onError: (e) {
+      print("Error updating document $e");
+      FirebaseFirestore.instance
+          .collection("brews")
+          .doc("one")
+          .set({"name": name, "strength": strength, "sugars": sugars}).then(
+              (value) => print("DocumentSnapshot successfully added!"),
+              onError: (e) {
+        print("Error setting document $e");
+      });
+    });
   }
 
   List<Brew> _brewListFromSnapshot(QuerySnapshot snapshot) {
@@ -52,6 +70,6 @@ class DatabaseService {
 
     // print("Snapshots ${brewsCollection.doc().snapshots()}");
 
-    return brewsCollection.doc(userID).snapshots().map((_userDataFromSnapshot));
+    return brewsCollection.doc("one").snapshots().map((_userDataFromSnapshot));
   }
 }
