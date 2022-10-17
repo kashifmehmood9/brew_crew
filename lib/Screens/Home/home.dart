@@ -1,7 +1,6 @@
 import 'package:brew_crew/Models/User.dart';
 
 import 'brew.dart';
-import 'settings_form.dart';
 import 'package:brew_crew/Services/AuthService.dart';
 import 'package:brew_crew/Services/database.dart';
 import 'package:flutter/material.dart';

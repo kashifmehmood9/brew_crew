@@ -96,6 +96,7 @@ class _SettingsFormState extends State<SettingsForm> {
                           await DatabaseService(userID: user.uid)
                               .updateUserData(int.parse(_currentSugars!),
                                   _name!, _strength!);
+                          Navigator.pop(context);
                         } else {
                           _formKey.currentState?.validate();
                         }

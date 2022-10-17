@@ -15,15 +15,13 @@ class DatabaseService {
 
     print({"sugars": sugars, "name": name, "strength": strength});
 
-    final washingtonRef = FirebaseFirestore.instance
-        .collection("brews")
+    brewsCollection
         .doc(userID)
         .update({"name": name, "strength": strength, "sugars": sugars}).then(
             (value) => print("DocumentSnapshot successfully updated!"),
             onError: (e) {
       print("Error updating document $e");
-      FirebaseFirestore.instance
-          .collection("brews")
+      brewsCollection
           .doc(userID)
           .set({"name": name, "strength": strength, "sugars": sugars}).then(
               (value) => print("DocumentSnapshot successfully added!"),
@@ -33,13 +31,16 @@ class DatabaseService {
     });
   }
 
-  List<Brew> _brewListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((document) {
-      return Brew(
-          name: document["name"],
-          sugars: document["sugars"],
-          strength: document['strength']);
-    }).toList();
+  List<Brew> _brewListFromSnapshot(DocumentSnapshot snapshot) {
+    dynamic document = snapshot.data();
+
+    // return docs.map((document) {
+    Brew brew = Brew(
+        name: document["name"],
+        sugars: document["sugars"],
+        strength: document['strength']);
+
+    return [brew];
   }
 
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
@@ -54,6 +55,7 @@ class DatabaseService {
 
   Stream<List<Brew>> get brews {
     return brewsCollection
+        .doc(userID)
         .snapshots()
         .map((snapshot) => _brewListFromSnapshot(snapshot));
   }
