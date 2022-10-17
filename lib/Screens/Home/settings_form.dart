@@ -1,26 +1,45 @@
+import 'dart:async';
+
 import 'package:brew_crew/Models/User.dart';
+import 'package:brew_crew/Services/brew_strength_database.dart';
 import 'package:brew_crew/Services/database.dart';
 import 'package:brew_crew/Shared/Constants.dart';
 import 'package:brew_crew/Shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SettingsForm extends StatefulWidget {
-  const SettingsForm({Key? key}) : super(key: key);
   @override
   State<SettingsForm> createState() => _SettingsFormState();
 }
 
 class _SettingsFormState extends State<SettingsForm> {
   final _formKey = GlobalKey<FormState>();
-  final List<String> sugars = ['0', '1', '2', '3', '4'];
+  List<String> sugars = [];
+
+  void getSugarsFromDatabase() async {
+    print("Getting sugars list");
+    await BrewStrengthDatabase().sugars.then((value) {
+      setState(() {
+        sugars = value.list;
+      });
+    });
+
+    print("Got sugars list $sugars");
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSugarsFromDatabase();
+  }
 
   // form values
   late String _name;
   String? _currentSugars;
 
-  int _strength = 100;
+  var _strength = 100;
   late UserData userData;
   @override
   Widget build(BuildContext context) {
@@ -29,12 +48,14 @@ class _SettingsFormState extends State<SettingsForm> {
     return StreamBuilder<UserData>(
         stream: DatabaseService(userID: user.uid).userData,
         builder: (context, snapshot) {
-          if (snapshot.hasData && _currentSugars == null) {
+          if (snapshot.hasData) {
+            print("snapshot has data");
             userData = snapshot.data as UserData;
-
             _name = userData.name;
             _currentSugars = userData.sugars.toString();
             _strength = userData.strength;
+          } else {
+            return Loading();
           }
           return Form(
               key: _formKey,

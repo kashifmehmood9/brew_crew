@@ -42,7 +42,7 @@ void _createBottomSheet(BuildContext context) {
       builder: (context) {
         return Container(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: const SettingsForm(),
+          child: SettingsForm(),
         );
       });
 }
