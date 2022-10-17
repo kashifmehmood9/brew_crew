@@ -7,9 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SettingsForm extends StatefulWidget {
-  Function state;
-  SettingsForm({required this.state});
-
+  const SettingsForm({Key? key}) : super(key: key);
   @override
   State<SettingsForm> createState() => _SettingsFormState();
 }
@@ -19,7 +17,8 @@ class _SettingsFormState extends State<SettingsForm> {
   final List<String> sugars = ['0', '1', '2', '3', '4'];
 
   // form values
-  String? _name, _currentSugars;
+  late String _name;
+  String? _currentSugars;
 
   int _strength = 100;
   late UserData userData;
@@ -30,14 +29,9 @@ class _SettingsFormState extends State<SettingsForm> {
     return StreamBuilder<UserData>(
         stream: DatabaseService(userID: user.uid).userData,
         builder: (context, snapshot) {
-          // snapshot.
-          if (!snapshot.hasData) {
-            print("No data ${snapshot.data}");
-            return Loading();
-          }
-          if (snapshot.data != null && _name == null) {
-            print("Snapshots has data");
+          if (snapshot.hasData && _currentSugars == null) {
             userData = snapshot.data as UserData;
+
             _name = userData.name;
             _currentSugars = userData.sugars.toString();
             _strength = userData.strength;
@@ -98,9 +92,7 @@ class _SettingsFormState extends State<SettingsForm> {
                   ElevatedButton.icon(
                       onPressed: () async {
                         if ((_formKey.currentState?.validate() ?? false) &&
-                            (_currentSugars != null &&
-                                _name != null &&
-                                _strength != null)) {
+                            (_currentSugars != null)) {
                           await DatabaseService(userID: user.uid)
                               .updateUserData(int.parse(_currentSugars!),
                                   _name!, _strength!);

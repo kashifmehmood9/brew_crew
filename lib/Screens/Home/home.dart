@@ -40,10 +40,6 @@ class _HomeState extends State<Home> {
                 },
                 icon: Icon(Icons.person),
                 label: Text("Logout")),
-            ElevatedButton.icon(
-                onPressed: () => _createBottomSheet(context),
-                icon: Icon(Icons.settings),
-                label: Text("settings"))
           ],
         ),
         body: Container(
@@ -54,18 +50,5 @@ class _HomeState extends State<Home> {
             child: const BrewList()),
       ),
     );
-  }
-
-  void _createBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (context) => StatefulBuilder(builder: (context, setState) {
-              return Container(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                child: SettingsForm(
-                  state: setState,
-                ),
-              );
-            }));
   }
 }

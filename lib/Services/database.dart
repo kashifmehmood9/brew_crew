@@ -12,21 +12,19 @@ class DatabaseService {
   DatabaseService({required this.userID});
   Future updateUserData(int sugars, String name, int strength) async {
     print("Updating records for ... $userID");
-    // await FirebaseFirestore.instance
-    //     .collection('brews')
-    //     .doc(userID)
+
     print({"sugars": sugars, "name": name, "strength": strength});
 
     final washingtonRef = FirebaseFirestore.instance
         .collection("brews")
-        .doc("one")
+        .doc(userID)
         .update({"name": name, "strength": strength, "sugars": sugars}).then(
             (value) => print("DocumentSnapshot successfully updated!"),
             onError: (e) {
       print("Error updating document $e");
       FirebaseFirestore.instance
           .collection("brews")
-          .doc("one")
+          .doc(userID)
           .set({"name": name, "strength": strength, "sugars": sugars}).then(
               (value) => print("DocumentSnapshot successfully added!"),
               onError: (e) {
@@ -61,6 +59,6 @@ class DatabaseService {
   }
 
   Stream<UserData> get userData {
-    return brewsCollection.doc("one").snapshots().map((_userDataFromSnapshot));
+    return brewsCollection.doc(userID).snapshots().map((_userDataFromSnapshot));
   }
 }
