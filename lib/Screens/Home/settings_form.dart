@@ -39,7 +39,7 @@ class _SettingsFormState extends State<SettingsForm> {
   late String _name;
   String? _currentSugars;
 
-  var _strength = 100;
+  late int _strength;
   late UserData userData;
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,6 @@ class _SettingsFormState extends State<SettingsForm> {
         stream: DatabaseService(userID: user.uid).userData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            print("snapshot has data");
             userData = snapshot.data as UserData;
             _name = userData.name;
             _currentSugars = userData.sugars.toString();

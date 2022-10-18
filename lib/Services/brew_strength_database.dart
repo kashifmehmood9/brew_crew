@@ -5,20 +5,20 @@ class BrewStrengthDatabase {
   CollectionReference get brewStrengthCollection =>
       FirebaseFirestore.instance.collection('brew-strength-list');
 
-  Future<BrewStrength> get sugars async {
+  Future<CoffeeSugars> get sugars async {
     return await brewStrengthCollection
         .doc("brew-strength")
         .get()
         .then((value) {
       dynamic data = value.data();
       List list = data["strength"];
-      return BrewStrength(list: list.map((e) => e.toString()).toList());
+      return CoffeeSugars(list: list.map((e) => e.toString()).toList());
     });
   }
 }
 
-class BrewStrength {
+class CoffeeSugars {
   List<String> list;
 
-  BrewStrength({required this.list});
+  CoffeeSugars({required this.list});
 }
