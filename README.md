@@ -1,7 +1,7 @@
 
-# brew_crew
+# Coffee brewer
 
-A coffee brewing app based on https://github.com/iamshaunjp/flutter-firebase
+A coffee brewing app based on https://github.com/iamshaunjp/flutter-firebase with many extensions, tweaks and improvements.
 
 ## Getting Started
 
