@@ -1,17 +1,9 @@
 
 # brew_crew
 
-A new Flutter project.
+A coffee brewing app based on https://github.com/iamshaunjp/flutter-firebase
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+a simple app that registers users, login users with provided Firebase authentication mechanism. 
+user can add strength, sugars and name as a label for their coffee when brewing.
